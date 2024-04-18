@@ -4,10 +4,13 @@ import mongoose from "mongoose";
 import NoteModel from "../models/notes.js";
 
 export const getNotes = async (req, res, next) => {
-  const authenticatedUserId = req.session.userId;
+  const userId = req.query.userId;
 
   try {
-    const notes = await NoteModel.find({ userId: authenticatedUserId }).exec();
+    if (!userId) {
+      throw createHttpError(400, "keine gültige UserId ");
+    }
+    const notes = await NoteModel.find({ userId: userId }).exec();
     res.status(200).json(notes);
   } catch (error) {
     next(error);

@@ -5,10 +5,10 @@ const UserContext = createContext();
 
 // Erstellen eines Providers, um den newUser zu verwalten und ihn in der gesamten App verfügbar zu machen
 export const UserProvider = ({ children }) => {
-  const [newUser, setNewUser] = useState(null);
+  const [user, setNewUser] = useState(null);
 
   return (
-    <UserContext.Provider value={{ newUser, setNewUser }}>
+    <UserContext.Provider value={{ user, setNewUser }}>
       {children}
     </UserContext.Provider>
   );

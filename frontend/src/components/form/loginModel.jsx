@@ -43,13 +43,13 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }) => {
     try {
       // Assuming signUp method from NotesApi takes an object with email and password
       const newUser = await API.login(data);
-      console.log("User created:", newUser);
-      toast.success("Account created");
+      console.log("User login:", newUser);
+      //   toast.success("Account created");
       setNewUser(newUser);
-      onDismiss();
+      onLoginSuccessful();
       // Trigger the onSignUpSuccessful callback with the new user data
     } catch (error) {
-      toast.error("Teletabi said oho");
+      //   toast.error("Teletabi said oho");
       console.error(error); // Log the error to the console for debugging
     }
   };

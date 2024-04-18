@@ -1,6 +1,8 @@
 import React from "react";
 import logo from "../assets/IRONHACK.png";
+import { useUser } from "../provider/UserProvider.jsx";
 const ASidebar = () => {
+  const { user } = useUser();
   return (
     <>
       <aside className="bg-black w-[250px] flex-none h-screen flex flex-col">
@@ -9,14 +11,10 @@ const ASidebar = () => {
           className="text-white text-center text-xl bg-black p-4"
           id="notes"
         >
-          The Medic
+          Hello {""}
+          {user.email}
         </section>
-        <section
-          className="text-white text-center text-xl bg-black p-4"
-          id="user"
-        >
-          User
-        </section>
+
         <section
           className="text-white text-center text-xl bg-black p-4"
           id="settings"

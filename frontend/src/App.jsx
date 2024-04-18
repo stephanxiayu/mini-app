@@ -2,20 +2,20 @@ import ASidebar from "./components/ASidebar";
 import ANavbar from "./components/ANavbar";
 import AFooter from "./components/AFooter";
 import { useUser } from "./provider/UserProvider";
+import LoggedOutScreen from "./components/loggedOutScreen/LoggedOutScreen";
+import TaskScreen from "./components/taskScreen/TaskScreen";
 function App() {
-  const { newUser } = useUser();
+  const { user } = useUser();
   return (
-    <>
-      <div className="flex flex-col h-screen">
-        {newUser ? <ASidebar /> : <ANavbar />}
-        {/* Inhaltsbereich, der den verbleibenden Raum einnimmt */}
-        <div className="flex-grow overflow-auto">
-          {/* Hier können Sie Ihren Hauptinhalt einfügen */}
-          <p>Main content goes here. Adjust this area based on your needs.</p>
-        </div>
-        {!newUser && <AFooter />}
+    <div className="flex h-screen">
+      {user ? <ASidebar /> : <ANavbar />}
+
+      <div className="flex-grow overflow-auto">
+        {user ? <TaskScreen /> : <LoggedOutScreen />}
       </div>
-    </>
+
+      {!user && <AFooter />}
+    </div>
   );
 }
 
