@@ -4,6 +4,7 @@ import * as API from "../../network/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useUser } from "../../provider/UserProvider";
+import { useNavigate } from "react-router-dom";
 const TextInputField = ({
   name,
   label,
@@ -32,6 +33,7 @@ const TextInputField = ({
 
 const SignUpModal = ({ onDismiss, onSignUpSuccessful }) => {
   const { setNewUser } = useUser();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -47,6 +49,7 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }) => {
       console.log("User created:", newUser);
       toast.success("Account created");
       setNewUser(newUser);
+      navigate("/todo");
       onDismiss(); // Trigger the onSignUpSuccessful callback with the new user data
     } catch (error) {
       toast.error("Teletabi said oho");

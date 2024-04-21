@@ -1,11 +1,9 @@
 import React from "react";
-
+import logo from "../../assets/high3.png";
 const LoggedOutScreen = () => {
   return (
     <>
-      <div className="text-center items-center justify-self-center">
-        LoggedOutScreen
-      </div>
+      <img src={logo} alt="Logo" className="bg-cover bg-center" />
     </>
   );
 };

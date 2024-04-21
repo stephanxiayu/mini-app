@@ -7,7 +7,8 @@ router.get("/", NotesController.getNotes);
 router.get("/:noteId", NotesController.getNote);
 
 router.post("/", NotesController.createNote);
-
+router.delete("/", NotesController.deleteNote);
+router.patch("/status", NotesController.updateNoteStatus);
 // router.patch("/:noteId", NotesController.updateNote);
 
 // router.delete("/:noteId", NotesController.deleteNote);

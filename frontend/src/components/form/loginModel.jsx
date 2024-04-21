@@ -4,6 +4,7 @@ import * as API from "../../network/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useUser } from "../../provider/UserProvider";
+import { useNavigate } from "react-router-dom";
 const TextInputField = ({
   name,
   label,
@@ -31,6 +32,7 @@ const TextInputField = ({
 );
 
 const LoginModal = ({ onDismiss, onLoginSuccessful }) => {
+  const navigate = useNavigate();
   const { setNewUser } = useUser();
   const {
     register,
@@ -45,17 +47,26 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }) => {
       const newUser = await API.login(data);
       console.log("User login:", newUser);
       //   toast.success("Account created");
-      setNewUser(newUser);
-      onLoginSuccessful();
+      if (newUser) {
+        // toast.success("Account created"); // Uncomment this if you want a success message
+        setNewUser(newUser);
+        toast.success("Login erforderlich");
+        navigate("/todo");
+        onLoginSuccessful();
+        // Trigger the onSignUpSuccessful callback with the new user data
+      } else {
+        // Optional: Show an error message to the user
+        toast.error("Login failed");
+      }
       // Trigger the onSignUpSuccessful callback with the new user data
     } catch (error) {
-      //   toast.error("Teletabi said oho");
       console.error(error); // Log the error to the console for debugging
     }
   };
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+      <ToastContainer theme="dark" />
       <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
         <div className="mt-3 text-center">
           <h3 className="text-lg leading-6 font-medium text-gray-900">Login</h3>
