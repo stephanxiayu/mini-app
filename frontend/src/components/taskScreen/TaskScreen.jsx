@@ -8,29 +8,26 @@ const TaskScreen = () => {
   const [notes, setNotes] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const { user } = useUser(); // Hook wird korrekt aufgerufen.
-  const [activeCard, setActiveCard] = useState(null);
+  const [activeCard, setActiveCard] = useState("");
+  const [updateNoteId, setUpdateNoteId] = useState("");
 
   useEffect(() => {
-    const getNotes = async (userId) => {
-      try {
-        const fetchedNotes = await API.getNotes(userId);
-        setNotes(fetchedNotes);
-        console.log("Fetched notes:", fetchedNotes);
-      } catch (error) {
-        console.error(`Error fetching notes: ${error}`);
-      }
-    };
-
     if (user?._id) {
-      console.log(`Fetching notes for user ID: ${user._id}`);
       getNotes(user._id);
     }
-  }, [user]);
+  }, [user, updateNoteId]);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
-
+  const getNotes = async (userId) => {
+    try {
+      const fetchedNotes = await API.getNotes(userId);
+      setNotes(fetchedNotes);
+    } catch (error) {
+      console.error(`Error fetching notes: ${error}`);
+    }
+  };
   const createNote = async () => {
     try {
       if (inputValue === "") {
@@ -72,68 +69,69 @@ const TaskScreen = () => {
       toast.error("note created");
     }
   };
-  const onDragStart = (index) => {
-    setActiveCard(index); // Speichere den Index der gedragten Notiz
-  };
-  const onDrag = async (stati, index) => {
-    if (activeCard === null) return;
+
+  const onDrag = async (stati, _id) => {
+    if (activeCard === null) {
+      return toast.error("scheiße");
+    }
     console.log(
-      `Verschiebe Karte ${activeCard} in ${stati} an der Position ${index}`
+      `Verschiebe Karte ${activeCard} in ${stati} an der Position ${_id}`
     );
 
-    // Prüfe, ob die user._id verfügbar ist
     if (!user._id) {
       console.error("UserID ist nicht verfügbar.");
       toast.error("Ein Fehler ist aufgetreten: UserID ist erforderlich.");
       return;
     }
+    const noteToMove = notes.find((note) => note._id === activeCard);
+    // noteToMove._id;
 
-    const noteToMove = notes[activeCard];
-    const noteId = noteToMove._id; // Zugriff auf die ID der zu bewegenden Notiz
-
-    let updatedNotes = [...notes];
-    updatedNotes.splice(activeCard, 1); // Entferne die Notiz von der alten Position
-    updatedNotes.splice(index, 0, { ...noteToMove, stati: stati }); // Füge die Notiz an der neuen Position hinzu
+    // Erstelle ein neues Array, indem du die Notiz direkt an der neuen Position einfügst
+    const updatedNotes = JSON.parse(JSON.stringify(notes)).filter(
+      (note) => note._id !== activeCard
+    ); // Entferne die alte Position der Notiz
+    updatedNotes.splice(_id, 0, { ...noteToMove, stati: stati }); // Füge die Notiz an der neuen Position ein
+    setActiveCard(null);
     setNotes(updatedNotes);
-    setActiveCard(null); // Setze activeCard zurück
-
+    console.log(`Update Note ID: ${noteToMove._id} to new status: ${stati}`);
     try {
+      console.log(`Update Note ID: ${noteToMove._id} to new status: ${stati}`);
+
       const response = await API.updateNoteStatus({
-        noteId: noteId,
+        noteId: noteToMove._id,
         userId: user._id,
         stati: stati,
       });
-      console.log("Server-Antwort: ", user._id);
-      toast.info("Notiz aktualisiert");
+      console.log("after await:", response);
+
+      // Nach erfolgreichem Update:
+      setUpdateNoteId(noteToMove._id);
     } catch (error) {
       console.error("Fehler beim Aktualisieren der Notiz: ", error);
       toast.error("Fehler beim Aktualisieren der Notiz");
-      setNotes(notes); // Stelle den ursprünglichen Zustand wieder her
     }
   };
 
-  const handleDrop = async (droppedNoteId, newStati) => {
-    // Optimistisches Update des lokalen Zustands
-    const provisionalUpdatedNotes = notes.map((note) => {
-      return note._id === droppedNoteId ? { ...note, stati: newStati } : note;
-    });
-    setNotes(provisionalUpdatedNotes);
-
-    try {
-      const response = await API.updateNoteStatus({
-        noteId: droppedNoteId,
-        userId: user._id,
-        stati: newStati,
-      });
-      console.log(response);
-      toast.success("Notiz aktualisiert");
-    } catch (error) {
-      console.error("Fehler beim Aktualisieren der Notiz: ", error);
-      toast.error("Fehler beim Aktualisieren der Notiz");
-
-      setNotes(notes);
-    }
-  };
+  // const handleDrop = async (droppedNoteId, newStati) => {
+  //   // // Optimistisches Update des lokalen Zustands
+  //   // const provisionalUpdatedNotes = notes.map((note) => {
+  //   //   return note._id === droppedNoteId ? { ...note, stati: newStati } : note;
+  //   // });
+  //   // setNotes(provisionalUpdatedNotes);
+  //   // try {
+  //   //   const response = await API.updateNoteStatus({
+  //   //     noteId: droppedNoteId,
+  //   //     userId: user._id,
+  //   //     stati: newStati,
+  //   //   });
+  //   //   console.log(response);
+  //   //   toast.success("Notiz aktualisiert");
+  //   // } catch (error) {
+  //   //   console.error("Fehler beim Aktualisieren der Notiz: ", error);
+  //   //   toast.error("Fehler beim Aktualisieren der Notiz");
+  //   //   setNotes(notes);
+  //   // }
+  // };
 
   return (
     <>
@@ -161,7 +159,7 @@ const TaskScreen = () => {
             title="Active To-Do"
             stati="aktiv"
             onDrag={onDrag}
-            onDrop={handleDrop}
+            // onDrop={handleDrop}
           />
           <NotesContainer
             setActiveCard={setActiveCard}
@@ -169,7 +167,7 @@ const TaskScreen = () => {
             title="Work in Progress"
             stati="progress"
             onDrag={onDrag}
-            onDrop={handleDrop}
+            // onDrop={handleDrop}
           />
           <NotesContainer
             setActiveCard={setActiveCard}
@@ -178,7 +176,7 @@ const TaskScreen = () => {
             title="ToDo is Done"
             stati="done"
             onDrag={onDrag}
-            onDrop={handleDrop}
+            // onDrop={handleDrop}
           />
         </div>
       </div>

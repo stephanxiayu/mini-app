@@ -43,24 +43,19 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }) => {
   const onSubmit = async (data) => {
     console.log(data);
     try {
-      // Assuming signUp method from NotesApi takes an object with email and password
       const newUser = await API.login(data);
-      console.log("User login:", newUser);
-      //   toast.success("Account created");
+
       if (newUser) {
-        // toast.success("Account created"); // Uncomment this if you want a success message
         setNewUser(newUser);
         toast.success("Login erforderlich");
         navigate("/todo");
         onLoginSuccessful();
-        // Trigger the onSignUpSuccessful callback with the new user data
       } else {
-        // Optional: Show an error message to the user
         toast.error("Login failed");
       }
-      // Trigger the onSignUpSuccessful callback with the new user data
     } catch (error) {
-      console.error(error); // Log the error to the console for debugging
+      console.error(error);
+      toast.error("Login failed");
     }
   };
 

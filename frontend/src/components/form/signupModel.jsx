@@ -41,19 +41,17 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }) => {
   } = useForm();
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const onSubmit = async (data) => {
-    console.log(`the data ${data}`);
-
     try {
       // Assuming signUp method from NotesApi takes an object with email and password
       const newUser = await API.signUp(data);
-      console.log("User created:", newUser);
+
       toast.success("Account created");
       setNewUser(newUser);
       navigate("/todo");
-      onDismiss(); // Trigger the onSignUpSuccessful callback with the new user data
+      onDismiss();
     } catch (error) {
       toast.error("Teletabi said oho");
-      console.error(error); // Log the error to the console for debugging
+      console.error(error);
     }
   };
 
