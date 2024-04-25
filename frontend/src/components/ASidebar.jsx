@@ -15,13 +15,6 @@ const ASidebar = () => {
           {user.email}
         </section>
 
-        <section
-          className="text-white text-center text-xl bg-black p-4"
-          id="settings"
-        >
-          Settings
-        </section>
-
         <button className="bg-white hover:bg-blue-400 text-black w-full px-4 py-4 rounded mt-auto">
           Logout
         </button>

@@ -3,6 +3,7 @@ import logo from "../assets/IRONHACK.png";
 import { useState } from "react";
 import LoginModal from "../components/form/loginModel.jsx";
 import SignUpModal from "../components/form/signupModel.jsx";
+import { Link } from "react-router-dom";
 const ANavbar = () => {
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -17,7 +18,9 @@ const ANavbar = () => {
   return (
     <>
       <nav className="bg-black h-40 p-10 flex items-center justify-between">
-        <img className="w-40 h-40" src={logo} alt="Logo" />
+        <Link to="/">
+          <img className="w-40 h-40" src={logo} alt="Logo" />
+        </Link>
         <div className="space-x-4">
           <button
             onClick={handleOpenLoginModal}
