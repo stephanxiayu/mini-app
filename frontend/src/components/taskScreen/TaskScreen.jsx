@@ -112,27 +112,6 @@ const TaskScreen = () => {
     }
   };
 
-  // const handleDrop = async (droppedNoteId, newStati) => {
-  //   // // Optimistisches Update des lokalen Zustands
-  //   // const provisionalUpdatedNotes = notes.map((note) => {
-  //   //   return note._id === droppedNoteId ? { ...note, stati: newStati } : note;
-  //   // });
-  //   // setNotes(provisionalUpdatedNotes);
-  //   // try {
-  //   //   const response = await API.updateNoteStatus({
-  //   //     noteId: droppedNoteId,
-  //   //     userId: user._id,
-  //   //     stati: newStati,
-  //   //   });
-  //   //   console.log(response);
-  //   //   toast.success("Notiz aktualisiert");
-  //   // } catch (error) {
-  //   //   console.error("Fehler beim Aktualisieren der Notiz: ", error);
-  //   //   toast.error("Fehler beim Aktualisieren der Notiz");
-  //   //   setNotes(notes);
-  //   // }
-  // };
-
   return (
     <>
       <div className="text-center text-black p-20">

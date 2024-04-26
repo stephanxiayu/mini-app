@@ -88,9 +88,6 @@ export const deleteNote = async (req, res, next) => {
 export const updateNoteStatus = async (req, res, next) => {
   const { noteId, userId, stati } = req.body; // Assuming you're sending userId in the body. If not, adjust accordingly.
 
-  console.log("Received userId:", userId);
-  console.log("Received noteId:", noteId);
-  console.log("Received new status:", stati);
   noteId;
   try {
     if (!noteId) {
